@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px">
+    <Button
+        android:text="Show popup Menu"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button1" />
+</LinearLayout>
+
+
+
+
+//create folder menu in resource and add popup_menu.axml
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      >
+  <item android:id="@+id/item1"
+        android:title="Menu 1"/>
+  <item android:id="@+id/item2"
+        android:title="Menu 2"/>
+  <item android:id="@+id/item3"
+        android:title="Menu 3"/>
+</menu>
+
+
+using Android.App;
+using Android.Widget;
+using Android.OS;
+using System;
+using Android.Views;
+
+namespace App1
+{
+    [Activity(Label = "App1", MainLauncher = true, Icon = "@drawable/icon")]
+    public class MainActivity : Activity
+    {
+        TextView txtView;
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+             SetContentView (Resource.Layout.Main);
+            var btnShow = FindViewById<Button>(Resource.Id.button1);
+            btnShow.Click += (sender, e) => {
+                PopupMenu menu = new PopupMenu(this, btnShow);
+                menu.MenuInflater.Inflate(Resource.Menu.popup_menu, menu.Menu);
+
+                menu.MenuItemClick += (s, arg) =>
+                {
+                    Toast.MakeText(this, String.Format("Menu {0} clicked:", arg.Item.TitleFormatted),ToastLength.Short).Show();
+                };
+                menu.DismissEvent += (s, arg) => {
+                    Toast.MakeText(this, String.Format("Menu dismissed:"), ToastLength.Short).Show();
+                };
+                menu.Show();
+            };
+        }
+
+    }
+}
+

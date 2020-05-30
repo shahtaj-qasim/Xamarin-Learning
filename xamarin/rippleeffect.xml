@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+  <FrameLayout
+  android:layout_height="wrap_content"
+  android:layout_width="match_parent"
+  android:background="#A9a9a9"
+  android:layout_marginTop="10dp"
+  android:elevation="6dp"
+>
+    <TextView
+      android:layout_height="100dp"
+  android:layout_width="match_parent"
+      android:background="?android:attr/selectableItemBackground"
+      android:clickable="true"
+      android:gravity="center"
+      android:padding="10dp"
+      android:textColor="#333639"
+      android:text="Ripple Animation"
+      />
+  
+</FrameLayout>
+  <FrameLayout
+  android:layout_height="wrap_content"
+  android:layout_width="match_parent"
+  android:background="#A9a9a9"
+  android:elevation="6dp"
+  android:layout_marginTop="10dp"
+>
+    <TextView
+      android:layout_height="100dp"
+  android:layout_width="match_parent"
+      android:background="#fff"
+      android:clickable="true"
+      android:gravity="center"
+      android:padding="10dp"
+      android:textColor="#333639"
+      android:text="Ripple Animation"
+      />
+  </FrameLayout>
+  <FrameLayout
+  android:layout_height="wrap_content"
+  android:layout_width="match_parent"
+  android:background="#A9a9a9"
+  android:layout_marginTop="10dp"
+  android:elevation="6dp"
+  
+>
+    <Button
+      android:layout_height="100dp"
+  android:layout_width="match_parent"
+      android:background="?android:attr/selectableItemBackground"
+      android:clickable="true"
+      android:gravity="center"
+      android:padding="10dp"
+      android:textColor="#333639"
+      android:text=" Button Ripple Animation"
+      />
+  </FrameLayout>
+ 
+</LinearLayout>

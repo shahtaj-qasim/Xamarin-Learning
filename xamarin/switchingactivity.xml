@@ -1,0 +1,124 @@
+//main.axml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minWidth="25px"
+    android:minHeight="25px"
+              >
+  <EditText
+    android:hint="Enter your name"
+     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+     android:id="@+id/name"/>
+  <EditText
+    android:hint="Enter your email"
+     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+     android:id="@+id/email"/>
+  <Button
+    android:text="Send Information"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/btnSend"/>
+</LinearLayout>
+
+
+//ReadActivity.axml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtName" />
+    <TextView
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtEmail" />
+    <Button
+        android:text="Go Back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnBack" />
+</LinearLayout>
+//mainActivity.cs
+using Android.App;
+using Android.Widget;
+using Android.OS;
+using Android.Support.V7.App;
+using Android.Support.Design.Widget;
+using Android.Views;
+using Android.Content;
+
+namespace Application2
+{
+    [Activity(Label = "Application2", MainLauncher = true, Icon = "@drawable/icon"
+        ,Theme ="@style/Theme.AppCompat.Light.DarkActionBar")]
+    public class MainActivity : AppCompatActivity
+    {
+        CoordinatorLayout rootLayout;
+        Button btnShow;
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+             SetContentView (Resource.Layout.Main);
+            var edtName = FindViewById<EditText>(Resource.Id.name);
+            var edtEmail = FindViewById<EditText>(Resource.Id.email);
+            var btnSend = FindViewById<Button>(Resource.Id.btnSend);
+            btnSend.Click += (s, e) => {
+                Intent nextActivity = new Intent(this,typeof(ReadActivity));
+                nextActivity.PutExtra("name", edtName.Text);
+                nextActivity.PutExtra("email", edtEmail.Text);
+                StartActivity(nextActivity);
+            };
+        }
+    }
+}
+
+//ReadActivity.cs
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+
+namespace Application2
+{
+    [Activity(Label = "ReadActivity")]
+    public class ReadActivity : Activity
+    {
+        protected override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+
+            // Create your application here
+            SetContentView(Resource.Layout.ReadActivity);
+            string name = Intent.GetStringExtra("name" ?? "not recv");
+            string email = Intent.GetStringExtra("email" ?? "not recv");
+            var txtEmail = FindViewById<TextView>(Resource.Id.txtEmail);
+            var txtName = FindViewById<TextView>(Resource.Id.txtName);
+            var btnBack = FindViewById<Button>(Resource.Id.btnBack);
+            txtName.Text = name;
+            txtEmail.Text = email;
+            btnBack.Click += delegate {
+                this.Finish();
+            };
+        }
+    }
+}

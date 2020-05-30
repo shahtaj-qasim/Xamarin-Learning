@@ -1,0 +1,9 @@
+F:\Xamarin\hangman\hangman\bin\Debug\hangman.exe.config
+F:\Xamarin\hangman\hangman\bin\Debug\hangman.exe
+F:\Xamarin\hangman\hangman\bin\Debug\hangman.pdb
+F:\Xamarin\hangman\hangman\obj\Debug\hangman.csprojResolveAssemblyReference.cache
+F:\Xamarin\hangman\hangman\obj\Debug\hangman.Form1.resources
+F:\Xamarin\hangman\hangman\obj\Debug\hangman.Properties.Resources.resources
+F:\Xamarin\hangman\hangman\obj\Debug\hangman.csproj.GenerateResource.Cache
+F:\Xamarin\hangman\hangman\obj\Debug\hangman.exe
+F:\Xamarin\hangman\hangman\obj\Debug\hangman.pdb

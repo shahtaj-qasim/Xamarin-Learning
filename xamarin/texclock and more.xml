@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px">
+    <TextView
+        android:text="Text Clock"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView1" />
+    <TextClock
+        android:format12Hour="hh:mm:ss a"
+        android:gravity="center_horizontal"
+        android:textColor="#d41709"
+        android:textSize="44sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textClock1" />
+    <TextClock
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textColor="#d41709"
+        android:textSize="44sp"
+        android:id="@+id/textClock2" />
+</LinearLayout>
+
+<!--main
+SetContentView(Resource.Layout.Main);
+!-->

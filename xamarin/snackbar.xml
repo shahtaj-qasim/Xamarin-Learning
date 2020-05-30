@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/coordinatorLayout"
+    tools:context=".MainActivity">
+    <Button
+        android:id="@+id/btnShow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Snackbar" />
+</android.support.design.widget.CoordinatorLayout>
+
+using Android.App;
+using Android.Widget;
+using Android.OS;
+using Android.Support.V7.App;
+using Android.Support.Design.Widget;
+using Android.Views;
+
+namespace Application2
+{
+    [Activity(Label = "Application2", MainLauncher = true, Icon = "@drawable/icon"
+        ,Theme ="@style/Theme.AppCompat.Light.DarkActionBar")]
+    public class MainActivity : AppCompatActivity
+    {
+        CoordinatorLayout rootLayout;
+        Button btnShow;
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+             SetContentView (Resource.Layout.Main);
+            rootLayout = FindViewById<CoordinatorLayout>(Resource.Id.coordinatorLayout);
+            btnShow = FindViewById<Button>(Resource.Id.btnShow);
+            btnShow.Click += delegate {
+                Snackbar snackBar = Snackbar.Make(rootLayout, "This is snackbar", Snackbar.LengthShort)
+                .SetAction("OK", (view) =>
+                {
+                    Toast.MakeText(this, "Snackbar Clicked", ToastLength.Short).Show();
+                }).SetActionTextColor(Android.Graphics.Color.ParseColor("#ffffee19"));
+                View snackbarView = snackBar.View;
+                snackbarView.SetBackgroundColor(Android.Graphics.Color.ParseColor("#ff21ab29"));
+                snackBar.Show();
+                };
+        }
+    }
+}
+

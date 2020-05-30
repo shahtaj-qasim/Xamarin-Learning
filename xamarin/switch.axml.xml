@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px">
+    <TextView
+        android:text="Switch Button"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView1"
+        android:gravity="center" />
+    <Switch
+        android:text="Android Switch Button 1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/switch1" />
+    <TextView
+        android:text="Switch Button"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2" />
+  <Switch
+       android:text="Android Switch Button 2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/switch2" />
+    <TextView
+        android:text="Switch Button"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView3" />
+</LinearLayout>
+
+using Android.App;
+using Android.Widget;
+using Android.OS;
+using Java.Lang;
+
+namespace Application1
+{
+    [Activity(Label = "Application1", MainLauncher = true, Icon = "@drawable/icon")]
+    public class MainActivity : Activity
+    {
+        
+
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+            SetContentView(Resource.Layout.Main);
+            var switchButton1 = FindViewById<Switch>(Resource.Id.switch1);
+            var switchButton2 = FindViewById<Switch>(Resource.Id.switch2);
+            var txtSwitch1 = FindViewById<TextView>(Resource.Id.textView1);
+            var txtSwitch2 = FindViewById<TextView>(Resource.Id.textView2);
+            switchButton1.Checked = true;
+            switchButton1.CheckedChange += (s, b) => {
+                bool isChecked = b.IsChecked;
+                if (isChecked)
+                {
+                    txtSwitch1.Text = ("Switch is on");
+                }
+                else
+                {
+                    txtSwitch1.Text = ("Switch is off");
+                }
+            };
+            switchButton2.CheckedChange += (s, b) => {
+                bool isChecked = b.IsChecked;
+                if (isChecked)
+                {
+                    txtSwitch2.Text = ("Switch is on");
+                }
+                else
+                {
+                    txtSwitch2.Text = ("Switch is off");
+                }
+            };
+        }
+    
+     
+    }
+       
+}
+

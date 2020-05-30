@@ -1,0 +1,9 @@
+F:\Xamarin\paintProgram\paintProgram\bin\Debug\paintProgram.exe.config
+F:\Xamarin\paintProgram\paintProgram\bin\Debug\paintProgram.exe
+F:\Xamarin\paintProgram\paintProgram\bin\Debug\paintProgram.pdb
+F:\Xamarin\paintProgram\paintProgram\obj\Debug\paintProgram.csprojResolveAssemblyReference.cache
+F:\Xamarin\paintProgram\paintProgram\obj\Debug\paintProgram.Form1.resources
+F:\Xamarin\paintProgram\paintProgram\obj\Debug\paintProgram.Properties.Resources.resources
+F:\Xamarin\paintProgram\paintProgram\obj\Debug\paintProgram.csproj.GenerateResource.Cache
+F:\Xamarin\paintProgram\paintProgram\obj\Debug\paintProgram.exe
+F:\Xamarin\paintProgram\paintProgram\obj\Debug\paintProgram.pdb

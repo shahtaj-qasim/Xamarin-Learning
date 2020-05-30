@@ -1,0 +1,9 @@
+F:\Xamarin\webBrowser\webBrowser\bin\Debug\webBrowser.exe.config
+F:\Xamarin\webBrowser\webBrowser\bin\Debug\webBrowser.exe
+F:\Xamarin\webBrowser\webBrowser\bin\Debug\webBrowser.pdb
+F:\Xamarin\webBrowser\webBrowser\obj\Debug\webBrowser.csprojResolveAssemblyReference.cache
+F:\Xamarin\webBrowser\webBrowser\obj\Debug\webBrowser.Form1.resources
+F:\Xamarin\webBrowser\webBrowser\obj\Debug\webBrowser.Properties.Resources.resources
+F:\Xamarin\webBrowser\webBrowser\obj\Debug\webBrowser.csproj.GenerateResource.Cache
+F:\Xamarin\webBrowser\webBrowser\obj\Debug\webBrowser.exe
+F:\Xamarin\webBrowser\webBrowser\obj\Debug\webBrowser.pdb

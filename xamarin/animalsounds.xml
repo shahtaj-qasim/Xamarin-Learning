@@ -1,0 +1,279 @@
+//create folder Activity in your application
+//drag MainActivity.cs in it
+//Main Activity.cs
+using Android.App;
+using Android.Widget;
+using Android.OS;
+using Android.Animation;
+using Calligraphy;
+using Android.Content;
+using System;
+using Java.Util;
+using Android.Graphics.Drawables;
+using Java.Lang;
+using Android.Media;
+using Android.Support.V7.App;
+using Android.Support.V4.View;
+using System.Linq;
+using static Android.Support.V4.View.ViewPager;
+using static Android.Views.View;
+using Android.Views;
+
+namespace Application3
+{
+    [Activity(Label = "Application3", Icon = "@drawable/icon", MainLauncher =true, Theme ="@style/Theme.AppCompat.Light.DarkActionBar")]
+    public class MainActivity : AppCompatActivity, IOnPageChangeListener, IOnClickListener
+    {
+        string[] animals = new string[] {
+            "forest","gorrilla","gender","parrots","swan","women"
+        };
+        ViewPager pager;
+        ImageButton btnPrev, btnnext, btnPlay;
+        TextView txtName;
+        MediaPlayer player;
+
+        public void OnClick(View v)
+        {
+            switch (v.Id)
+            {
+                case Resource.Id.btnPrevious:
+                    {
+                        if(pager.CurrentItem == 0)
+                        {
+                            pager.SetCurrentItem(animals.Length - 1, true);
+                        }
+                        else
+                        {
+                            pager.SetCurrentItem(pager.CurrentItem - 1, true);
+                        }
+                    }
+                    break;
+                case Resource.Id.btnNext:
+                    {
+                        if (pager.CurrentItem == animals.Length-1)
+                        {
+                            pager.SetCurrentItem(0, true);
+                        }
+                        else
+                        {
+                            pager.SetCurrentItem(pager.CurrentItem + 1, true);
+                        }
+                    }
+                    break;
+                case Resource.Id.btnSpeak:
+                    {
+                        int soundId = this.Resources.GetIdentifier(txtName.Text.ToLower(), "raw", this.PackageName);
+                        player = MediaPlayer.Create(this, soundId);
+                        player.Looping = false;
+                        player.SetVolume(1.0f, 1.0f);
+                        player.Start();
+                    }
+                    break;
+            }
+        }
+
+        public void OnPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+        {
+            
+        }
+
+        public void OnPageScrollStateChanged(int state)
+        {
+           
+        }
+
+        public void OnPageSelected(int position)
+        {
+            //set name of animal
+            txtName.Text = $"{UpperFirstLetter(animals[position])}";
+            if(player != null && player.IsPlaying == true)
+            {
+                player.Stop();
+            }
+        }
+
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+            //set default font
+          
+            SetContentView (Resource.Layout.Main);
+            //random sort list animals
+            Guid guid = Guid.NewGuid();
+            animals = animals.OrderBy(x => guid).ToArray();
+
+            txtName = FindViewById<TextView>(Resource.Id.txtName);
+            txtName.Text = (UpperFirstLetter(animals[0]));
+
+            pager = FindViewById<ViewPager>(Resource.Id.pager);
+            ViewPagerAdapter adapter = new ViewPagerAdapter(this, animals);
+            pager.Adapter = adapter;
+            pager.SetOnPageChangeListener(this);
+            btnPrev = FindViewById<ImageButton>(Resource.Id.btnPrevious);
+            btnnext = FindViewById<ImageButton>(Resource.Id.btnNext);
+            btnPlay = FindViewById<ImageButton>(Resource.Id.btnSpeak);
+            btnPrev.SetOnClickListener(this);
+            btnnext.SetOnClickListener(this);
+            btnPlay.SetOnClickListener(this);
+
+        }
+
+        private string UpperFirstLetter(string v)
+        {
+            StringBuilder str = new StringBuilder(v);
+            return str.Substring(0, 1).ToUpper() + str.Substring(1).ToLower();
+        }
+    }
+}
+
+
+//create class from add new items ViewPagerAdapter.cs in activity folder
+//ViewPagerAdapter
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+using Android.Support.V4.View;
+using Java.Lang;
+
+namespace Application3
+{
+    class ViewPagerAdapter : PagerAdapter //pageradapter for screen slides
+    {
+        Activity activity;
+        string[] animals;
+        LayoutInflater inflater;
+
+        public ViewPagerAdapter(Activity activity, string[] animals)
+        {
+            this.activity = activity;
+            this.animals = animals;
+        }
+        public override int Count
+        {
+            get
+            {
+                return animals.Length;
+            }
+        }
+
+        public override bool IsViewFromObject(View view, Java.Lang.Object objectValue)
+        {
+            return view == objectValue;
+        }
+
+        public override Java.Lang.Object InstantiateItem(ViewGroup container, int position)
+        {
+            inflater = (LayoutInflater)activity.BaseContext.GetSystemService(Context.LayoutInflaterService);
+            View itemView= inflater.Inflate(Resource.Layout.viewpager_item,container,false);
+            ImageView imgView = itemView.FindViewById <ImageView>(Resource.Id.imgView);
+            int animalImgId = activity.Resources.GetIdentifier(animals[position], "drawable", activity.PackageName);
+            imgView.SetImageResource(animalImgId);
+            container.AddView(itemView);
+            return itemView;
+        }
+        public override void DestroyItem(View container, int position, Java.Lang.Object objectValue)
+        {
+            ((ViewGroup)container).RemoveView((View)objectValue);
+        }
+
+    }
+}
+
+
+//in layout folder create viewpager_item.axml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+  <ImageView
+    android:id="@+id/imgView"
+    android:scaleType="fitXY"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
+</LinearLayout>
+
+//Main.axml
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+  <android.support.v4.view.ViewPager
+    android:id="@+id/pager"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+  </android.support.v4.view.ViewPager>
+
+  <RelativeLayout
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+    <LinearLayout
+      android:background="#A5333333"
+      android:layout_alignParentTop="true"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtName"
+        android:text="Name"
+        android:textSize="20sp"
+        android:textColor="#fff"
+        android:gravity="center"
+        android:layout_marginBottom="10dp">
+      </TextView>
+    </LinearLayout>
+    <ImageButton
+      android:id="@+id/btnPrevious"
+      android:src="@drawable/arrow_left"
+      android:layout_alignParentLeft="true"
+      android:layout_centerVertical="true"
+      android:background="#A5313231"
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      style="@style/Widget.AppCompat.Button.Colored"/>
+   <ImageButton
+      android:id="@+id/btnNext"
+      android:src="@drawable/arrow_right"
+      android:layout_alignParentRight="true"
+      android:layout_centerVertical="true" //used in relativelayout for center gravity
+      android:background="#A5313231"
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      style="@style/Widget.AppCompat.Button.Colored"/>
+   <ImageButton
+      android:id="@+id/btnSpeak"
+      android:src="@drawable/Icon"
+      android:layout_alignParentBottom="true"
+      android:layout_centerHorizontal="true"
+      android:background="#A5313231"
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      style="@style/Widget.AppCompat.Button.Colored"/>
+  </RelativeLayout>
+</FrameLayout>
+
+
+//create style.xml in values folder
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <item name="windowNoTitle">true</item>
+    <item name="windowActionBar">false</item>
+    <item name="android:windowFullscreen">true</item>
+    <item name="android:windowContentOverlay">@null</item>
+  </style>
+</resources>
+
+//create new folder in resources name 'raw' and add all the audio in it
+//paste all images in drawable

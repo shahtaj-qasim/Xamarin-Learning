@@ -1,0 +1,38 @@
+//main.axml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" //can make vertical
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:text="Hello \nWorld"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="151dp"
+        android:layout_height="match_parent"
+        android:id="@+id/textView1"
+        android:paddingTop="16dp"
+        android:paddingLeft="16dp"
+        android:background="@android:color/black"
+        android:textColor="@android:color/holo_orange_light" />
+    <TextView
+        android:text="Xamarin"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="151dp"
+        android:layout_height="match_parent"
+        android:id="@+id/textView2"
+        android:paddingTop="16dp"
+        android:background="@android:color/black"
+        android:textColor="@android:color/holo_orange_light" />
+    <TextView
+        android:text="World"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="151dp"
+        android:layout_height="match_parent"
+        android:id="@+id/textView3"
+        android:paddingTop="16dp"
+        android:background="@android:color/black"
+        android:textColor="@android:color/holo_orange_light" />
+</LinearLayout>
+
+ <!--mainActivity.cs
+  SetContentView (Resource.Layout.Main); !-->

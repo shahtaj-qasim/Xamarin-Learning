@@ -1,0 +1,76 @@
+main.axml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px">
+    <TextView
+        android:text="Android Spinner"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView1" />
+    <Spinner
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner1"
+        android:spinnerMode="dialog" //also can try removing this line for dropdown
+        />
+</LinearLayout>
+
+//strings.xml
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Hello">Hello World, Click Me!</string>
+    <string name="ApplicationName">Application1</string>
+  <string-array name="counter">
+    <item>One</item>
+    <item>Two</item>
+    <item>Three</item>
+    <item>Four</item>
+    <item>Five</item>
+    <item>Six</item>
+    <item>Seven</item>
+    <item>Eight</item>
+    <item>Nine</item>
+    <item>Ten</item>
+  </string-array>
+</resources>
+
+
+using Android.App;
+using Android.Widget;
+using Android.OS;
+
+namespace Application1
+{
+    [Activity(Label = "Application1", MainLauncher = true, Icon = "@drawable/icon",Theme="@android:style/Theme.Holo.Light")]
+    public class MainActivity : Activity
+    {
+      
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+             SetContentView (Resource.Layout.Main);
+            var spinner = FindViewById<Spinner>(Resource.Id.spinner1);
+            spinner.Prompt = "Choose your number";
+            spinner.ItemSelected += new System.EventHandler<AdapterView.ItemSelectedEventArgs>(spinner_ItemSelected);
+            var adapter = ArrayAdapter.CreateFromResource(this, Resource.Array.counter, Android.Resource.Layout.SimpleSpinnerItem);
+            adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+            spinner.Adapter = adapter;
+             
+
+        }
+        private void spinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
+        {
+            var spinner = sender as Spinner;
+            Toast.MakeText(this, "You chose: " + spinner.GetItemAtPosition(e.Position), ToastLength.Short).Show();
+        }
+    }
+}
+

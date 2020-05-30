@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px">
+    <ScrollView
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <DatePicker
+                android:id="@+id/datePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+            <Button
+                android:id="@+id/change_date_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Change Date"
+                android:textSize="22sp" />
+            <TextView
+                android:id="@+id/textViewDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Display Date"
+                android:textSize="22sp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
+
+using Android.App;
+using Android.Widget;
+using Android.OS;
+using Java.Lang;
+
+namespace Application1
+{
+    [Activity(Label = "Application1", MainLauncher = true, Icon = "@drawable/icon")] //also can have with holo light theme
+    public class MainActivity : Activity
+    {
+        DatePicker datePicker;
+
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+            SetContentView(Resource.Layout.Main);
+            datePicker = FindViewById<DatePicker>(Resource.Id.datePicker);
+            var btnChnage = FindViewById<Button>(Resource.Id.change_date_button);
+            var txtDate = FindViewById<TextView>(Resource.Id.textViewDate);
+            txtDate.Text = ((getDate()));
+            btnChnage.Click += (s,e) => {
+                txtDate.Text = ((getDate()));
+            };
+        }
+      
+        private string getDate()
+        {
+            StringBuilder strCurrentDate = new StringBuilder();
+            int month = datePicker.Month + 1;
+            strCurrentDate.Append("Date: " + month + "/" + datePicker.DayOfMonth + "/" + datePicker.Year);
+            return strCurrentDate.ToString();
+        }
+    }
+       
+}
+
+
+

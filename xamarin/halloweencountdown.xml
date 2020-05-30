@@ -1,0 +1,275 @@
+//main.axml
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:background="@drawable/bg">
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:layout_marginTop="40dp"
+  android:orientation="vertical">
+    <TextView
+      android:id="@+id/txtDaysRemain"
+      android:text="13"
+      android:textColor="#f21212"
+  android:textSize="30sp"
+  android:gravity="center_horizontal"
+  android:layout_height="wrap_content"
+  android:layout_width="wrap_content"/>
+    <TextView
+      android:id="@+id/txtDay"
+      android:text="DAYS"
+      android:textColor="#f21212"
+  android:textSize="30sp"
+  android:gravity="center_horizontal"
+  android:layout_height="wrap_content"
+  android:layout_width="wrap_content"/>
+  <TextView
+      android:id="@+id/txtLongString"
+      android:text="13 days 12:59:59"
+      android:textColor="#f21212"
+  android:textSize="30sp"
+  android:gravity="center_horizontal"
+  android:layout_height="wrap_content"
+  android:layout_width="wrap_content"/>
+    <ImageView
+      android:layout_width="80dp"
+  android:layout_height="80dp"
+  android:id="@+id/pumpkin"
+      android:src="@drawable/anim_pumpkin"
+  android:layout_marginRight="50dp"
+  android:layout_gravity="right"/>
+  </LinearLayout>
+
+</RelativeLayout>
+
+
+//mainactivity.cs
+using Android.App;
+using Android.Widget;
+using Android.OS;
+using Android.Animation;
+using Calligraphy;
+using Android.Content;
+using System;
+using Java.Util;
+using Android.Graphics.Drawables;
+using Java.Lang;
+using Android.Media;
+
+namespace Application3
+{
+    [Activity(Label = "Application3", Icon = "@drawable/icon", Theme ="@style/Theme.AppCompat.Light.NoActionBar")]
+    public class MainActivity : Activity
+    {
+        ImageView pumkinAnim;
+        TextView txtDaysRemain, txtDay, txtLongString;
+        protected override void OnResume()
+        {
+            base.OnResume();
+            new BackgroundSound().Execute(this);
+        }
+        protected override void AttachBaseContext(Context @base)
+        {
+            base.AttachBaseContext(CalligraphyContextWrapper.Wrap(@base));
+        }
+
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+            //set default font
+            CalligraphyConfig.InitDefault(new CalligraphyConfig.Builder()
+                .SetDefaultFontPath("Blood Cyrillic.ttf")
+                .SetFontAttrId(Resource.Attribute.fontPath).Build());
+            SetContentView (Resource.Layout.Main);
+
+            //control
+            pumkinAnim = FindViewById<ImageView>(Resource.Id.pumpkin);
+            ((AnimationDrawable)pumkinAnim.Drawable).Start();
+            txtDay = FindViewById<TextView>(Resource.Id.txtDay);
+            txtDaysRemain = FindViewById<TextView>(Resource.Id.txtDaysRemain);
+            txtLongString = FindViewById<TextView>(Resource.Id.txtLongString);
+            StartTimer();
+        }
+        private long GetRemainDays()
+        {
+            Date currentDate = new Date();
+            Date endDate;
+            if (currentDate.Month <= 9)
+            {
+                endDate = new Date(currentDate.Year, 9, 31);
+            }
+            else
+            {
+                endDate = new Date(currentDate.Year + 1, 9, 31);
+
+
+            }
+            return endDate.Time - currentDate.Time;
+        }
+
+        private void StartTimer()
+        {
+            CountDown c = new CountDown(this, GetRemainDays(), 1000);
+            c.Start();
+        }
+        private class CountDown : CountDownTimer
+        {
+            MainActivity activity;
+            public CountDown(MainActivity activity, long totalTime, long interval):base(totalTime,interval)
+            {
+                this.activity = activity;
+            }
+            public override void OnFinish()
+            {
+                
+            }
+
+            public override void OnTick(long millisUntilFinished)
+            {
+                int days = (int)(millisUntilFinished / (100 * 60 * 60 * 24));
+                int hours = (int)(millisUntilFinished / (1000 * 60 * 60)% 24);
+                int mins = (int)(millisUntilFinished / (1000 * 60) % 60);
+                int secs = (int)(millisUntilFinished / (1000) % 60);
+                activity.txtDaysRemain.Text = $"{days}";
+                if (days <= 1)
+                {
+                    activity.txtDay.Text = "DAY";
+                    activity.txtLongString.Text = string.Format("{0} day {1:00}:{2:00}:{3:00}",days,hours,mins,secs);
+
+
+                }
+                else
+                {
+                    activity.txtDay.Text = "DAYS";
+                    activity.txtLongString.Text = string.Format("{0} days {1:00}:{2:00}:{3:00}", days, hours, mins, secs);
+
+                }
+            }
+        }
+        private class BackgroundSound : AsyncTask<MainActivity, Java.Lang.Void, Java.Lang.Void>
+        {
+            protected override Java.Lang.Void RunInBackground(params MainActivity[] @params)
+            {
+                MediaPlayer player;
+                System.Random rd = new System.Random();
+                int id = rd.Next(2-1)+1;
+                if (id == 1)
+                {
+                    player = MediaPlayer.Create(@params[0].ApplicationContext, Resource.Raw.yay);
+
+                }
+                else
+                {
+                    player = MediaPlayer.Create(@params[0].ApplicationContext, Resource.Raw.aww);
+
+                }
+                player.Looping = true;
+                player.SetVolume(1.0f, 1.0f);
+                player.Start();
+                return null;
+            }
+        }
+    }
+}
+
+//splashscreen.axml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#000"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+  <ImageView
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+android:layout_gravity="center"
+android:keepScreenOn="true"
+android:id="@+id/imageView"/>
+</RelativeLayout>
+
+//splashscreen.cs
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+using System.Timers;
+using Android.Support.V7.App;
+
+namespace Application3
+{
+    [Activity(Label = "SplashScreen", MainLauncher =true , Theme="@style/Theme.AppCompat.Light.NoActionBar")]
+    public class SplashScreen : AppCompatActivity
+    {
+        private static int[] IMAGES = new int[]
+        {
+            
+            Resource.Drawable.Icon,Resource.Drawable.Icon
+        };
+        protected override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+
+            // Create your application here
+            SetContentView(Resource.Layout.SplashScreen);
+            Random rd = new Random();
+            int id = rd.Next(IMAGES.Length - 1);
+            ImageView img = FindViewById<ImageView>(Resource.Id.imageView);
+            img.SetImageResource(IMAGES[id]);
+            Timer timer = new Timer();
+            timer.Interval = 3000; //3 sec
+            timer.AutoReset = false;
+            timer.Elapsed += (object sender, ElapsedEventArgs e) => {
+                StartActivity(new Intent(this, typeof(MainActivity)));
+                OverridePendingTransition(Resource.Animation.fadein, Resource.Animation.fadeout);
+                base.Finish();
+            };
+            timer.Start();  
+        }
+    }
+}
+
+///create anim folder in resources and make fadein.xml and fadeout.xml inside it
+//fadein.xml
+<?xml version="1.0" encoding="utf-8" ?>
+<alpha xmlns:android="http://schemas.android.com/apk/res/android"
+       android:interpolator="@android:anim/linear_interpolator"
+       android:duration="1000" android:fromAlpha="0.0"
+       android:toAlpha="1.0"
+      
+       />
+
+//fadeout.xml
+<?xml version="1.0" encoding="utf-8" ?>
+<alpha xmlns:android="http://schemas.android.com/apk/res/android"
+       android:interpolator="@android:anim/linear_interpolator"
+       android:duration="1000" android:fromAlpha="1.0"
+       android:toAlpha="0.0"
+       android:zAdjustment="bottom"
+       />
+
+//create anim_pumkin.xml inside drawable also change Icon name to bg.jpg
+//anim_pumkin.xml
+<?xml version="1.0" encoding="utf-8" ?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+                android:oneshot="false">
+  <item android:duration="2000" android:drawable="@drawable/thumb_3"/>
+  <item android:duration="2000" android:drawable="@drawable/thumb_3"/>
+</animation-list>
+
+
+//create raw folder inside resources and paste yay.wav and aww.wav inside it
+
+//add Blood Cyrillic.ttf inside assets folder

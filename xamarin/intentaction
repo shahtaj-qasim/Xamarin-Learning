@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minWidth="25px"
+    android:minHeight="25px" >
+  <Button
+    android:id="@+id/btnMaps"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Show Map"/>
+  <Button
+  android:id="@+id/btnDialer"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:text="Show Dialer"/>
+  <Button
+  android:id="@+id/btnCon"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:text="View Contact"/>
+  <Button
+  android:id="@+id/btnEditCon"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:text="Edit Contact"/>
+  <Button
+ android:id="@+id/btnWeb"
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:text="Show Web"/>
+</LinearLayout>
+
+using Android.App;
+using Android.Widget;
+using Android.OS;
+using Android.Support.V7.App;
+using Android.Support.Design.Widget;
+using Android.Views;
+using Android.Content;
+
+namespace Application2
+{
+    [Activity(Label = "Application2", MainLauncher = true, Icon = "@drawable/icon"
+        ,Theme ="@style/Theme.AppCompat.Light.DarkActionBar")]
+    public class MainActivity : AppCompatActivity
+    {
+        CoordinatorLayout rootLayout;
+        Button btnShow;
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+             SetContentView (Resource.Layout.Main);
+            var btnMap = FindViewById<Button>(Resource.Id.btnMaps);
+            var btnEditCon = FindViewById<Button>(Resource.Id.btnEditCon);
+            var btnDialer = FindViewById<Button>(Resource.Id.btnDialer);
+            var btnCon = FindViewById<Button>(Resource.Id.btnCon);
+            var btnWeb = FindViewById<Button>(Resource.Id.btnWeb);
+            btnMap.Click += delegate {
+                //warning:
+                //you need to install google play services on your emulator
+                //and install google maps on your emulator
+                //intent will search for activity listen and call it
+                var geoUri = Android.Net.Uri.Parse("geo:16.053200,108.20284?q=16.053200,108.20284");
+                var mapIntent = new Intent(Intent.ActionView, geoUri);
+                StartActivity(mapIntent);
+            };
+            btnDialer.Click += delegate {
+                var uri = Android.Net.Uri.Parse("tel:84988353682");
+                var callIntent = new Intent(Intent.ActionView, uri);
+                StartActivity(callIntent);
+            };
+            btnEditCon.Click += delegate {
+                //Edit contact of people who have id=1-first people in contact list
+                var uri = Android.Net.Uri.Parse("content://contacts/people/1");
+                var intent = new Intent(Intent.ActionView, uri);
+                StartActivity(intent);
+            };
+            btnEditCon.Click += delegate {
+                //view all contact
+                var uri = Android.Net.Uri.Parse("content://contacts/people/");
+                var intent = new Intent(Intent.ActionView, uri);
+                StartActivity(intent);
+            };
+            btnWeb.Click += delegate {
+                //view all contact
+                var uri = Android.Net.Uri.Parse("http://google.com");
+                var intent = new Intent(Intent.ActionView, uri);
+                StartActivity(intent);
+            };
+
+        }
+    }
+}
+

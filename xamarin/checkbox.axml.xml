@@ -1,0 +1,113 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px">
+    <CheckBox
+        android:text="JQuery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox1"
+        android:onClick="ckb_onClick"/>
+    <CheckBox
+        android:text="Java"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox2"
+        android:onClick="ckb_onClick"/>
+    <CheckBox
+        android:text="PHP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox3"
+        android:onClick="ckb_onClick"/>
+    <CheckBox
+        android:text="CSharp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox4"
+        android:onClick="ckb_onClick"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout1">
+        <CheckBox
+            android:text="Ruby"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBox5"
+            android:onClick="ckb_onClick"/>
+      <CheckBox
+           android:text="Python"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:id="@+id/checkBox6"
+           android:onClick="ckb_onClick"/>
+    </LinearLayout>
+</LinearLayout>
+
+using Android.App;
+using Android.Widget;
+using Android.OS;
+using System;
+using Android.Views;
+using Android.Support.V7.App;
+using Android.Support.V7.Widget;
+using Java.Interop;
+
+namespace Application
+{
+    [Activity(Label = "Application", MainLauncher = true, Icon = "@drawable/icon", Theme ="@style/Theme.AppCompat.Light.NoActionBar")]
+    public class MainActivity : AppCompatActivity
+    {
+        CheckBox ckb1, ckb2, ckb3, ckb4, ckb5, ckb6;
+        [Export("ckb_OnClick")] //for this reference mono export.dll
+        public void ckb_OnClick(View v)
+        {
+            Toast.MakeText(this, "Clicked", ToastLength.Short).Show();
+            switch (v.Id)
+            {
+                case Resource.Id.checkBox1:
+                    Toast.MakeText(this, "Clicked checkbox 1", ToastLength.Short).Show();
+                    break;
+                case Resource.Id.checkBox2:
+                    Toast.MakeText(this, "Clicked checkbox 2", ToastLength.Short).Show();
+                    break;
+                case Resource.Id.checkBox3:
+                    Toast.MakeText(this, "Clicked checkbox 3", ToastLength.Short).Show();
+                    break;
+                case Resource.Id.checkBox4:
+                    Toast.MakeText(this, "Clicked checkbox 4", ToastLength.Short).Show();
+                    break;
+                case Resource.Id.checkBox5:
+                    Toast.MakeText(this, "Clicked checkbox 5", ToastLength.Short).Show();
+                    break;
+                case Resource.Id.checkBox6:
+                    Toast.MakeText(this, "Clicked checkbox 6", ToastLength.Short).Show();
+                    break;
+            }
+        }
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+            SetContentView (Resource.Layout.Main);
+            ckb1 = FindViewById<CheckBox>(Resource.Id.checkBox1);
+            ckb2 = FindViewById<CheckBox>(Resource.Id.checkBox2);
+            ckb3 = FindViewById<CheckBox>(Resource.Id.checkBox3);
+            ckb4 = FindViewById<CheckBox>(Resource.Id.checkBox4);
+            ckb5 = FindViewById<CheckBox>(Resource.Id.checkBox5);
+            ckb6 = FindViewById<CheckBox>(Resource.Id.checkBox6);
+
+        }
+    
+    }
+}
+

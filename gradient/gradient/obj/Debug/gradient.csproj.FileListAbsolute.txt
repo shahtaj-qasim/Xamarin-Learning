@@ -1,0 +1,9 @@
+F:\Xamarin\gradient\gradient\bin\Debug\gradient.exe.config
+F:\Xamarin\gradient\gradient\bin\Debug\gradient.exe
+F:\Xamarin\gradient\gradient\bin\Debug\gradient.pdb
+F:\Xamarin\gradient\gradient\obj\Debug\gradient.csprojResolveAssemblyReference.cache
+F:\Xamarin\gradient\gradient\obj\Debug\gradient.Form1.resources
+F:\Xamarin\gradient\gradient\obj\Debug\gradient.Properties.Resources.resources
+F:\Xamarin\gradient\gradient\obj\Debug\gradient.csproj.GenerateResource.Cache
+F:\Xamarin\gradient\gradient\obj\Debug\gradient.exe
+F:\Xamarin\gradient\gradient\obj\Debug\gradient.pdb

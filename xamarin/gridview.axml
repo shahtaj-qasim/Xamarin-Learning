@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px">
+    <GridView
+      android:columnWidth="90dp"
+      android:numColumns="auto_fit"
+      android:verticalSpacing="10dp"
+      android:horizontalSpacing="10dp"
+      android:stretchMode="columnWidth"
+      android:gravity="center"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/gridView1" />
+</LinearLayout>
+
+//ImageAdapter.cs
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+using Java.Lang;
+
+namespace App1
+{
+    class ImageAdapter : BaseAdapter
+    {
+        Context context;
+        int[] thumbsIds =
+        {
+            Resource.Drawable.thumb_1,
+            Resource.Drawable.thumb_2,
+            Resource.Drawable.thumb_3,
+            Resource.Drawable.thumb_4,
+            Resource.Drawable.thumb_1,
+            Resource.Drawable.thumb_2,
+            Resource.Drawable.thumb_3,
+            Resource.Drawable.thumb_4,
+            Resource.Drawable.thumb_1,
+            Resource.Drawable.thumb_2,
+            Resource.Drawable.thumb_3,
+            Resource.Drawable.thumb_4,
+             Resource.Drawable.thumb_1,
+            Resource.Drawable.thumb_2,
+            Resource.Drawable.thumb_3,
+            Resource.Drawable.thumb_4,
+             Resource.Drawable.thumb_1,
+            Resource.Drawable.thumb_2,
+            Resource.Drawable.thumb_3,
+            Resource.Drawable.thumb_4
+        };
+        public ImageAdapter(Context c)
+        {
+            context = c;
+        }
+        public override int Count
+        {
+            get
+            {
+                return thumbsIds.Length;
+            }
+        }
+
+        public override Java.Lang.Object GetItem(int position)
+        {
+            return null;
+        }
+
+        public override long GetItemId(int position)
+        {
+            return 0;
+        }
+
+        public override View GetView(int position, View convertView, ViewGroup parent)
+        {
+            ImageView imgView;
+            if (convertView == null) //if not recycled, initialize some attributes
+            {
+                imgView = new ImageView(context);
+                imgView.LayoutParameters = new GridView.LayoutParams(85, 85);
+                imgView.SetScaleType(ImageView.ScaleType.CenterCrop);
+                imgView.SetPadding(8, 8, 8, 8);
+            }
+            else
+            {
+                imgView = (ImageView)convertView;
+            }
+            imgView.SetImageResource(thumbsIds[position]);
+            return imgView;
+        }
+    }
+}
+
+
+using Android.App;
+using Android.Widget;
+using Android.OS;
+using System;
+
+namespace App1
+{
+    [Activity(Label = "App1", MainLauncher = true, Icon = "@drawable/icon")]
+    public class MainActivity : Activity
+    {
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+             SetContentView (Resource.Layout.Main);
+            var gridView = FindViewById<GridView>(Resource.Id.gridView1);
+            gridView.Adapter = new ImageAdapter(this);
+            gridView.ItemClick += gridView_Click;
+        }
+
+        private void gridView_Click(object sender, AdapterView.ItemClickEventArgs e)
+        {
+            Toast.MakeText(this, "Position: "+e.Position, ToastLength.Short).Show();
+        }
+    }
+}
+

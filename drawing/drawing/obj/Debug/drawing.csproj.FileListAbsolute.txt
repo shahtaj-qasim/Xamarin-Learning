@@ -1,0 +1,9 @@
+F:\Xamarin\drawing\drawing\bin\Debug\drawing.exe.config
+F:\Xamarin\drawing\drawing\bin\Debug\drawing.exe
+F:\Xamarin\drawing\drawing\bin\Debug\drawing.pdb
+F:\Xamarin\drawing\drawing\obj\Debug\drawing.csprojResolveAssemblyReference.cache
+F:\Xamarin\drawing\drawing\obj\Debug\drawing.Form1.resources
+F:\Xamarin\drawing\drawing\obj\Debug\drawing.Properties.Resources.resources
+F:\Xamarin\drawing\drawing\obj\Debug\drawing.csproj.GenerateResource.Cache
+F:\Xamarin\drawing\drawing\obj\Debug\drawing.exe
+F:\Xamarin\drawing\drawing\obj\Debug\drawing.pdb

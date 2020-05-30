@@ -1,0 +1,9 @@
+F:\Xamarin\captcha\captcha\bin\Debug\captcha.exe.config
+F:\Xamarin\captcha\captcha\bin\Debug\captcha.exe
+F:\Xamarin\captcha\captcha\bin\Debug\captcha.pdb
+F:\Xamarin\captcha\captcha\obj\Debug\captcha.csprojResolveAssemblyReference.cache
+F:\Xamarin\captcha\captcha\obj\Debug\captcha.Form1.resources
+F:\Xamarin\captcha\captcha\obj\Debug\captcha.Properties.Resources.resources
+F:\Xamarin\captcha\captcha\obj\Debug\captcha.csproj.GenerateResource.Cache
+F:\Xamarin\captcha\captcha\obj\Debug\captcha.exe
+F:\Xamarin\captcha\captcha\obj\Debug\captcha.pdb

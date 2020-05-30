@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px">
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBar1" />
+    <TextView
+      android:gravity="center"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView1" />
+</LinearLayout>
+
+using Android.App;
+using Android.Widget;
+using Android.OS;
+using Android.Webkit;
+using Java.Lang;
+using System;
+using Android.Runtime;
+using Android.Views;
+
+namespace App1
+{
+    [Activity(Label = "App1", MainLauncher = true, Icon = "@drawable/icon")]
+    public class MainActivity : Activity
+    {
+        TextView txtResult;
+      
+
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+            SetContentView(Resource.Layout.Main);
+            var seekBar = FindViewById<SeekBar>(Resource.Id.seekBar1);
+             txtResult = FindViewById<TextView>(Resource.Id.textView1);
+            txtResult.Text = "Result: ";
+            //Attaching a lambda to seekbar.progresschanged event
+           seekBar.ProgressChanged += (s, e) => {
+                txtResult.Text = string.Format("The value of seekbar {0}", e.Progress);
+
+            };
+            //using listener
+            
+        }
+        
+      
+    
+    }
+
+}
+

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px">
+    <TextView
+        android:id="@+id/txtView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Android ImageView"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+    <ImageView
+        android:id="@+id/ImgView"
+        android:layout_height="300dp"
+        android:layout_width="wrap_content"
+        android:src="@drawable/icon" />
+    <Button
+        android:text="Previous"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnPrev" />
+    <Button
+        android:text="Next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnNext" />
+</LinearLayout>
+
+//mainActivity.cs
+using Android.App;
+using Android.Widget;
+using Android.OS;
+
+namespace Application
+{
+    [Activity(Label = "Application", MainLauncher = true, Icon = "@drawable/icon")]
+    public class MainActivity : Activity
+    {
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+            SetContentView (Resource.Layout.Main);
+            var imageView = FindViewById<ImageView>(Resource.Id.ImgView);
+            var btnPre = FindViewById<Button> (Resource.Id.btnPrev);
+            var btnNext = FindViewById<Button>(Resource.Id.btnNext);
+            btnPre.Click += (e,o) =>
+            {
+                imageView.SetImageResource(Resource.Drawable.Icon);
+                btnNext.Visibility = Android.Views.ViewStates.Visible;
+                btnPre.Visibility = Android.Views.ViewStates.Invisible;
+            };
+            btnNext.Click += (e, o) =>
+            {
+                imageView.SetImageResource(Resource.Drawable.Android);
+                btnPre.Visibility = Android.Views.ViewStates.Visible;
+                btnNext.Visibility = Android.Views.ViewStates.Invisible;
+            };
+
+        }
+    }
+}
+

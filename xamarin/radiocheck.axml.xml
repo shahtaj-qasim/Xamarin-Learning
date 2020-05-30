@@ -1,0 +1,86 @@
+using Android.App;
+using Android.Widget;
+using Android.OS;
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px">
+    <TextView
+        android:text="Radio Button"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView1" />
+    <RadioGroup
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/radioGroup1">
+        <RadioButton
+            android:onClick="RadioBut_OnClick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Luck"
+            android:id="@+id/rdiLuck" />
+        <RadioButton
+            android:onClick="RadioBut_OnClick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Money"
+            android:id="@+id/rdiMoney" />
+        <RadioButton
+            android:onClick="RadioBut_OnClick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Healthy"
+            android:id="@+id/rdiHealth" />
+    </RadioGroup>
+</LinearLayout>
+
+using System;
+using Android.Views;
+using Android.Support.V7.App;
+using Android.Support.V7.Widget;
+using Java.Interop;
+
+namespace Application
+{
+    [Activity(Label = "Application", MainLauncher = true, Icon = "@drawable/icon", Theme ="@style/Theme.AppCompat.Light.NoActionBar")]
+    public class MainActivity : AppCompatActivity
+    {
+        [Export("RadioBut_OnClick")]
+        public void RadioBut_OnClick(View v)
+        {
+            switch (v.Id)
+            {
+                case Resource.Id.rdiLuck:
+                    Toast.MakeText(this, "You Clicked Luck", ToastLength.Short).Show();
+                    break;
+                case Resource.Id.rdiMoney:
+                    Toast.MakeText(this, "You Clicked Money", ToastLength.Short).Show();
+                    break;
+                case Resource.Id.rdiHealth:
+                    Toast.MakeText(this, "You Clicked Health", ToastLength.Short).Show();
+                    break;
+            }
+        }
+       
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+            SetContentView (Resource.Layout.Main);
+        
+
+        }
+    
+    }
+}
+

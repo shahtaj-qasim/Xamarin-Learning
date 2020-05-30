@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:id="@+id/wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnContainer"
+        android:layout_alignParentTop="true">
+        <ImageView
+            android:id="@+id/imgView"
+            android:background="@drawable/thumb_3"
+            android:layout_centerHorizontal="true"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/btnContainer"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/btnX"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="X" />
+        <Button
+            android:id="@+id/btnY"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Y" />
+    </LinearLayout>
+</RelativeLayout>
+
+using Android.App;
+using Android.Widget;
+using Android.OS;
+using Android.Animation;
+
+namespace Application3
+{
+    [Activity(Label = "Application3", MainLauncher = true, Icon = "@drawable/icon")]
+    public class MainActivity : Activity
+    {
+        Button btnX, btnY;
+        RelativeLayout wrapper;
+        ImageView imgView;
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+             SetContentView (Resource.Layout.Main);
+            btnX = FindViewById<Button>(Resource.Id.btnX);
+            btnY = FindViewById<Button>(Resource.Id.btnY);
+            wrapper = FindViewById<RelativeLayout>(Resource.Id.wrapper);
+            imgView = FindViewById<ImageView>(Resource.Id.imgView);
+            btnX.Click += delegate {
+                int screenWidth = wrapper.Width;
+                int targetX = screenWidth - imgView.Width;
+                ObjectAnimator animator = ObjectAnimator.OfFloat(imgView, "x", 0, targetX);
+                animator.SetDuration(300);
+                animator.Start();
+            };
+            btnY.Click += delegate {
+                int screenHeight = wrapper.Height;
+                int targetY = screenHeight - imgView.Height;
+                ObjectAnimator animator = ObjectAnimator.OfFloat(imgView, "y", 0, targetY);
+                animator.SetDuration(300);
+                animator.Start();
+            };
+        }
+    }
+}
+

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minWidth="25px"
+    android:minHeight="25px">
+    <EditText
+        android:hint="To"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/to" />
+    <EditText
+        android:hint="Subject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/subject" />
+    <EditText
+        android:hint="Message"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:id="@+id/message" />
+    <Button
+        android:text="Send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="#498b24"
+        android:padding="5dp"
+        android:textColor="#fff"
+        android:id="@+id/button1" />
+</LinearLayout>
+
+using Android.App;
+using Android.Widget;
+using Android.OS;
+using Android.Support.V7.App;
+using Android.Support.Design.Widget;
+using Android.Views;
+using Android.Content;
+
+namespace Application2
+{
+    [Activity(Label = "Application2", MainLauncher = true, Icon = "@drawable/icon"
+        ,Theme ="@style/Theme.AppCompat.Light.DarkActionBar")]
+    public class MainActivity : AppCompatActivity
+    {
+
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+            //turn services on in this
+            SetContentView(Resource.Layout.Main);
+            var to = FindViewById<EditText>(Resource.Id.to);
+            var subject = FindViewById<EditText>(Resource.Id.subject);
+            var message = FindViewById<EditText>(Resource.Id.message);
+            var btnSend = FindViewById<Button>(Resource.Id.button1);
+            btnSend.Click += (s, e) => {
+                Intent email = new Intent(Intent.ActionSend);
+                email.PutExtra(Intent.ExtraEmail, new string[] { to.Text.ToString() });
+                email.PutExtra(Intent.ExtraSubject, subject.Text.ToString());
+                email.PutExtra(Intent.ExtraText, message.Text.ToString());
+                email.SetType("message/rfc822");
+                StartActivity(Intent.CreateChooser(email, "Send email via"));
+            };
+
+        }
+     
+    }
+}
+

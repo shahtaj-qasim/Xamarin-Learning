@@ -1,0 +1,687 @@
+//main.axml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_main"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/thumb_3"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+    <android.support.design.widget.TextInputLayout
+        android:layout_below="@+id/thumb_3"
+        android:id="@+id/login_input_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/login_email"
+            android:hint="Enter your email"
+            android:inputType="textCapWords"
+            android:maxLines="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_below="@+id/login_input_email"
+        android:id="@+id/login_input_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/login_password"
+            android:hint="Enter your password"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </android.support.design.widget.TextInputLayout>
+    <Button
+        android:layout_below="@+id/login_input_password"
+        android:id="@+id/login_btn"
+        android:text="Login"
+        android:background="#263238"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
+    <TextView
+        android:layout_below="@+id/login_btn"
+        android:id="@+id/forgot_pass"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+        android:textStyle="bold"
+        android:text="Forgot Password"
+        android:textColor="@color/colorPrimaryDark"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_below="@+id/forgot_pass"
+        android:id="@+id/login_layout"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <View
+            android:layout_width="200dp"
+            android:layout_height="1dp"
+            android:background="#c4c8c9"
+            android:layout_margin="5dp" />
+        <TextView
+            android:padding="5dp"
+            android:text="OR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+  <TextView
+        android:layout_below="@+id/login_btn_or"
+        android:id="@+id/login_btn_sign_up"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+        android:textStyle="bold"
+        android:text="Sign Up"
+        android:textColor="@color/colorPrimaryDark"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+  
+</RelativeLayout>
+
+//mainactivity.cs
+using Android.App;
+using Android.Widget;
+using Android.OS;
+using Android.Animation;
+using Calligraphy;
+using Android.Content;
+using System;
+using Java.Util;
+using Android.Graphics.Drawables;
+using Java.Lang;
+using Android.Media;
+using Android.Support.V7.App;
+using Android.Support.V4.View;
+using System.Linq;
+using static Android.Support.V4.View.ViewPager;
+using static Android.Views.View;
+using Android.Views;
+using System.Collections.Generic;
+using Firebase;
+using Firebase.Auth;
+using Android.Gms.Tasks;
+using Android.Support.Design.Widget;
+
+namespace Application3
+{
+    [Activity(Label = "Application3", Icon = "@drawable/icon", MainLauncher =true, Theme ="@style/AppTheme")]
+    public class MainActivity : AppCompatActivity, IOnClickListener,IOnCompleteListener
+    {
+        Button btnLogin;
+        EditText input_email, input_pass;
+        TextView btnSignup, btnForgotPass;
+        RelativeLayout activity_main;
+        public static FirebaseApp app;
+        FirebaseAuth auth;
+        
+        protected override async void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+            //set default font
+          
+            SetContentView (Resource.Layout.Main);
+
+            //init firebase
+            InitFirebaseAuth();
+            btnLogin = FindViewById<Button>(Resource.Id.login_btn);
+            input_email = FindViewById<EditText>(Resource.Id.login_email);
+            input_pass = FindViewById<EditText>(Resource.Id.login_input_password);
+            btnSignup = FindViewById<TextView>(Resource.Id.login_btn_sign_up);
+            btnForgotPass = FindViewById<TextView>(Resource.Id.forgot_pass);
+
+            btnSignup.SetOnClickListener(this);
+            btnLogin.SetOnClickListener(this);
+            btnForgotPass.SetOnClickListener(this);
+            
+        }
+
+        private void InitFirebaseAuth()
+        {
+            var options = new FirebaseOptions.Builder()
+                .SetApplicationId("1:892310111958:android:fab1f2129abff139").SetApiKey("AIzaSyDKLHHrOhCt_CXcQkTXn4AkpXLkSNXd_hc").Build();
+            if(app== null)
+            {
+                app = FirebaseApp.InitializeApp(this, options);
+                auth = FirebaseAuth.GetInstance(app);
+            }
+        }
+
+        public void OnClick(View v)
+        {
+            if (v.Id == Resource.Id.forgot_pass)
+            {
+                StartActivity(new Android.Content.Intent(this, typeof(ForgotPassword)));
+                Finish();
+            }
+           else if (v.Id == Resource.Id.login_btn_sign_up)
+            {
+                StartActivity(new Android.Content.Intent(this, typeof(SignUp)));
+                Finish();
+            }
+            else if (v.Id == Resource.Id.login_btn)
+            {
+                LoginUser(input_email.Text, input_pass.Text);
+            }
+        }
+
+        private void LoginUser(string email, string pass)
+        {
+            auth.SignInWithEmailAndPassword(email, pass)
+                .AddOnCompleteListener(this);
+        }
+
+        public void OnComplete(Task task)
+        {
+            if (task.IsSuccessful == true)
+            {
+                StartActivity(new Android.Content.Intent(this, typeof(DashBoard)));
+            }
+            else
+            {
+                Snackbar snackbar = Snackbar.Make(activity_main, "Login Failed", Snackbar.LengthShort);
+                snackbar.Show();
+            }
+        }
+    }
+}
+
+
+//values folder
+//colors.xml
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <color name="colorPrimary">#607d8b</color>
+  <color name="colorPrimaryDark">#37474f</color>
+  <color name="colorAccent">#eceff1</color>
+</resources>
+//values folder styles.xml
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+  </style>
+</resources>
+
+
+//signup.axml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_signup"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+  <ImageView
+      android:id="@+id/icon"
+      android:layout_alignParentTop="true"
+      android:layout_centerHorizontal="true"
+      android:background="@drawable/thumb_3"
+      android:layout_width="100dp"
+      android:layout_height="100dp" />
+  <android.support.design.widget.TextInputLayout
+      android:layout_below="@+id/icon"
+      android:id="@+id/signup_input_email"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+    <EditText
+        android:id="@+id/signup_email"
+        android:hint="Enter your email"
+        android:inputType="textCapWords"
+        android:maxLines="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+  </android.support.design.widget.TextInputLayout>
+  <android.support.design.widget.TextInputLayout
+      android:layout_below="@+id/signup_input_email"
+      android:id="@+id/signup_input_password"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+    <EditText
+        android:id="@+id/signup_password"
+        android:hint="Enter your password"
+        android:inputType="textPassword"
+        android:maxLines="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+  </android.support.design.widget.TextInputLayout>
+  <Button
+      android:layout_below="@+id/signup_input_password"
+      android:id="@+id/signup_btn_register"
+      android:text="Register"
+      android:background="#263238"
+      style="@style/Widget.AppCompat.Button.Colored"
+      android:layout_height="wrap_content"
+      android:layout_width="match_parent" />
+  <TextView
+      android:layout_below="@+id/signup_btn_register"
+      android:id="@+id/forgot_pass"
+      android:layout_centerHorizontal="true"
+      android:clickable="true"
+      android:textStyle="bold"
+      android:text="Forgot Password"
+      android:textColor="@color/colorPrimaryDark"
+      style="@style/Widget.AppCompat.Button.Borderless"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+  <LinearLayout
+      android:layout_below="@+id/forgot_pass"
+      android:id="@+id/signup_layout"
+      android:gravity="center"
+      android:orientation="horizontal"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+    <View
+        android:layout_width="200dp"
+        android:layout_height="1dp"
+        android:background="#c4c8c9"
+        android:layout_margin="5dp" />
+    <TextView
+        android:padding="5dp"
+        android:text="OR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+  </LinearLayout>
+  <TextView
+        android:layout_below="@+id/signup_btn_or"
+        android:id="@+id/signup_btn_login"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+        android:textStyle="bold"
+        android:text="Sign Up"
+        android:textColor="@color/colorPrimaryDark"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>
+
+//SignUp.cs
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+using Android.Support.V7.App;
+using Firebase.Auth;
+using static Android.Views.View;
+using Android.Gms.Tasks;
+using Android.Support.Design.Widget;
+
+namespace Application3
+{
+    [Activity(Label ="Sign Up", Theme ="@style/AppTheme")]
+    public class SignUp : AppCompatActivity, IOnClickListener,IOnCompleteListener
+    {
+        Button btnSignup;
+        TextView btnLogin, btnForgotPass;
+        EditText input_email, input_pass;
+        RelativeLayout activity_signup;
+
+        FirebaseAuth auth;
+
+        protected override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+            SetContentView(Resource.Layout.SignUp);
+
+            //initFirebase
+            auth = FirebaseAuth.GetInstance(MainActivity.app);
+
+            //view
+            btnSignup = FindViewById<Button>(Resource.Id.signup_btn_register);
+            btnLogin = FindViewById<TextView>(Resource.Id.signup_btn_login);
+            btnForgotPass = FindViewById<TextView>(Resource.Id.forgot_pass);
+            input_email = FindViewById<EditText>(Resource.Id.signup_email);
+            input_pass = FindViewById<EditText>(Resource.Id.signup_input_password);
+            activity_signup = FindViewById<RelativeLayout>(Resource.Id.activity_signup);
+
+            btnLogin.SetOnClickListener(this);
+            btnForgotPass.SetOnClickListener(this);
+            btnSignup.SetOnClickListener(this);
+
+            
+        }
+
+        public void OnClick(View v)
+        {
+            if(v.Id== Resource.Id.signup_btn_login)
+            {
+                StartActivity(new Intent(this, typeof(MainActivity)));
+            }
+            else if(v.Id== Resource.Id.forgot_pass)
+            {
+                StartActivity(new Intent(this, typeof(ForgotPassword)));
+                Finish();
+            }
+            else if (v.Id == Resource.Id.signup_btn_register)
+            {
+                SignupUser(input_email.Text, input_pass.Text);
+            }
+        }
+
+        private void SignupUser(string email, string pass)
+        {
+            auth.CreateUserWithEmailAndPassword(email, pass)
+                .AddOnCompleteListener(this, this);
+        }
+
+        public void OnComplete(Task task)
+        {
+            if (task.IsSuccessful == true)
+            {
+                Snackbar snackBar = Snackbar.Make(activity_signup, "Login Success", Snackbar.LengthShort);
+                snackBar.Show();
+            }
+            else
+            {
+                Snackbar snackBar = Snackbar.Make(activity_signup, "Login Failed", Snackbar.LengthShort);
+                snackBar.Show();
+            }
+        }
+    }
+}
+
+//ForgotPassword.axml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_forgot"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/thumb_3"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+    <TextView
+        android:layout_below="@+id/icon"
+        android:id="@+id/dashboard_message"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+        android:textStyle="bold"
+        android:text="We just need your registered email to send your password reset instructions"
+        android:textColor="@color/colorPrimaryDark"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <android.support.design.widget.TextInputLayout
+        android:layout_below="@+id/forgot_message"
+        android:id="@+id/forgot_input_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/forgot_email"
+            android:hint="Enter your email"
+            android:inputType="textCapWords"
+            android:maxLines="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </android.support.design.widget.TextInputLayout>
+    <Button
+        android:layout_below="@+id/forgot_input_email"
+        android:id="@+id/forgot_btn_Reset"
+        android:text="Reset Password"
+        android:background="#263238"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
+    <TextView
+        android:layout_below="@+id/forgot_btn_reset"
+        android:id="@+id/forgot_btn_back"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+        android:textStyle="bold"
+        android:text="Back"
+        android:textColor="@color/colorPrimaryDark"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>
+
+//ForgotPassword.cs
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+using Android.Support.V7.App;
+using Firebase.Auth;
+using static Android.Views.View;
+using Android.Gms.Tasks;
+using Android.Support.Design.Widget;
+
+namespace Application3
+{
+    [Activity(Label = "ForgotPassword", Theme = "@style/AppTheme")]
+    public class ForgotPassword : AppCompatActivity, IOnClickListener, IOnCompleteListener
+    {
+        private EditText input_email;
+        private Button btnResetPass;
+        private TextView btnBack;
+        private RelativeLayout activity_forgot;
+        FirebaseAuth auth;
+        protected override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+            SetContentView(Resource.Layout.ForgotPassword);
+
+            //InitFirebase
+            auth = FirebaseAuth.GetInstance(MainActivity.app);
+
+            //view
+            input_email = FindViewById<EditText>(Resource.Id.forgot_email);
+            btnResetPass = FindViewById<Button>(Resource.Id.forgot_btn_Reset);
+            btnBack = FindViewById<TextView>(Resource.Id.forgot_btn_back);
+            activity_forgot = FindViewById<RelativeLayout>(Resource.Id.activity_forgot);
+
+            btnResetPass.SetOnClickListener(this);
+            btnBack.SetOnClickListener(this);
+
+        }
+        public void OnClick(View v)
+        {
+            if (v.Id == Resource.Id.forgot_btn_back)
+            {
+                StartActivity(new Intent(this, typeof(MainActivity)));
+            }
+            else if (v.Id == Resource.Id.forgot_btn_reset)
+            {
+                ResetPassword(input_email.Text);
+            }
+        }
+        private void ResetPassword(string email)
+        {
+            auth.SendPasswordResetEmail(email)
+                .AddOnCompleteListener(this, this);
+        }
+        public void OnComplete(Task task)
+        {
+            if (task.IsSuccessful == false)
+            {
+                Snackbar snackBar = Snackbar.Make(activity_forgot, "Reset Password Failed", Snackbar.LengthShort);
+                snackBar.Show();
+            }
+            else
+            {
+                Snackbar snackBar = Snackbar.Make(activity_forgot, "Reset password link sent to email: "+input_email.Text, Snackbar.LengthShort);
+                snackBar.Show();
+            }
+        }
+    }
+}
+
+//Dashboard.axml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_dashboard"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/thumb_3"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+    <TextView
+        android:layout_below="@+id/icon"
+        android:id="@+id/dashboard_welcome"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+        android:textStyle="bold"
+        android:text="Welcome User"
+        android:textColor="@color/colorPrimaryDark"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <android.support.design.widget.TextInputLayout
+        android:layout_below="@+id/dashboard_welcome"
+        android:id="@+id/dashboard_input_newpass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/dashboard_newpass"
+            android:hint="Enter new Password"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </android.support.design.widget.TextInputLayout>
+    <Button
+        android:layout_below="@+id/dashboard_input_newpass"
+        android:id="@+id/dashboard_btn_change_pass"
+        android:text="Change Password"
+        android:background="#263238"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
+    <Button
+        android:layout_below="@+id/dashboard_btn_change_pass"
+        android:id="@+id/dashboard_logout"
+        android:text="Logout"
+        android:background="#263238"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
+</RelativeLayout>
+
+//Dashboard.cs
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+using Android.Support.V7.App;
+using Firebase.Auth;
+using static Android.Views.View;
+using Android.Gms.Tasks;
+using Android.Support.Design.Widget;
+
+namespace Application3
+{
+    [Activity(Label = "DashBoard", Theme ="@style/AppTheme")]
+    public class DashBoard : AppCompatActivity,IOnClickListener, IOnCompleteListener
+    {
+        TextView txtWelcome;
+        EditText input_new_pass;
+        Button btnChangePass, btnLogout;
+        RelativeLayout activity_dashboard;
+
+        FirebaseAuth auth;
+
+
+        protected override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+            SetContentView(Resource.Layout.Dashboard);
+
+            //InitFirebase
+            auth = FirebaseAuth.GetInstance(MainActivity.app);
+
+            //view
+            txtWelcome = FindViewById<TextView>(Resource.Id.dashboard_welcome);
+            input_new_pass = FindViewById<EditText>(Resource.Id.dashboard_newpass);
+            btnChangePass = FindViewById<Button>(Resource.Id.dashboard_btn_change_pass);
+            btnLogout = FindViewById<Button>(Resource.Id.dashboard_logout);
+            activity_dashboard = FindViewById<RelativeLayout>(Resource.Id.activity_dashboard);
+
+            btnChangePass.SetOnClickListener(this);
+            btnLogout.SetOnClickListener(this);
+
+
+        }
+
+        public void OnClick(View v)
+        {
+            if(v.Id == Resource.Id.dashboard_btn_change_pass)
+            {
+                ChangePassword(input_new_pass.Text);
+            }
+            else if (v.Id == Resource.Id.dashboard_logout)
+            {
+                LogoutUser();
+            }
+        }
+
+        private void ChangePassword(string newpass)
+        {
+            FirebaseUser user = auth.CurrentUser;
+            user.UpdatePassword(newpass)
+                .AddOnCompleteListener(this);
+        }
+
+        private void LogoutUser()
+        {
+            auth.SignOut();
+            if (auth.CurrentUser == null)
+            {
+                StartActivity(new Intent(this, typeof(MainActivity)));
+                Finish();
+            }
+        }
+
+        public void OnComplete(Task task)
+        {
+            if (task.IsSuccessful == true)
+            {
+                Snackbar snackBar = Snackbar.Make(activity_dashboard, "Login Success", Snackbar.LengthShort);
+                snackBar.Show();
+            }
+        }
+    }
+}

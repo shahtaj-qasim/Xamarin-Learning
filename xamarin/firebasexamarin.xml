@@ -1,0 +1,382 @@
+//go to console.firebase.google.com
+//make new project and add information like first box is Application3.Application3 (copy from project properties->android menifest->package name)
+second box is Application3
+third box is sha1 
+go to https://developer.xamarin.com/guides/android/deployment,_testing,_and_metrics/MD5_SHA1/ for sha1
+open cmd and go to C:\Program Files (x86)\Java\jdkVERSION\bin\keytool.exe
+write keytool.exe -list -v -keystore "%LocalAppData%\Xamarin\Mono for Android\debug.keystore" -alias androiddebugkey -storepass android -keypass android
+in the cmd, paste sha1 from cmd in 3rd box
+
+copy url from realtime database (https://xamarinandroidfirebase.firebaseio.com/users) in FirebaseURL inside mainactivity.cs
+go to rules and edit to {
+  "rules": {
+    ".read": "true",
+    ".write": "true"
+  }
+}
+
+//main.axml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+  <android.support.v7.widget.Toolbar
+    android:id="@+id/toobar"
+    android:minHeight="?attr/actionBarSize"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorPrimary"
+    app:titleTextColor="@android:color/white">
+    
+  </android.support.v7.widget.Toolbar>
+  <android.support.design.widget.TextInputLayout
+    android:layout_below="@+id/toobar"
+    android:id="@+id/txtName"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <EditText
+      android:id="@+id/name"
+      android:hint="Enter your username"
+      android:inputType="textCapWords"
+      android:maxLines="1"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+      
+    </EditText>
+    
+  </android.support.design.widget.TextInputLayout>
+<android.support.design.widget.TextInputLayout
+    android:layout_below="@+id/txtName"
+    android:id="@+id/txtEmail"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <EditText
+      android:id="@+id/email"
+      android:hint="Enter your email"
+      android:inputType="textCapWords"
+      android:maxLines="1"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+      
+    </EditText>
+    
+  </android.support.design.widget.TextInputLayout> 
+<ListView
+  android:id="@+id/list_data"
+android:layout_below="@+id/txtEmail"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"/>
+  <ProgressBar
+    android:id="@+id/circularProgress"
+android:visibility="invisible"
+android:layout_centerInParent="true"
+android:theme="@style/CircularProgress"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+style="@style/Widget.AppCompat.ProgressBar"/>
+</RelativeLayout>
+
+
+//MainActivity.cs
+using Android.App;
+using Android.Widget;
+using Android.OS;
+using Android.Animation;
+using Calligraphy;
+using Android.Content;
+using System;
+using Java.Util;
+using Android.Graphics.Drawables;
+using Java.Lang;
+using Android.Media;
+using Android.Support.V7.App;
+using Android.Support.V4.View;
+using System.Linq;
+using static Android.Support.V4.View.ViewPager;
+using static Android.Views.View;
+using Android.Views;
+using System.Collections.Generic;
+using Application3.Model;
+using System.Threading.Tasks;
+using Firebase.Xamarin.Database;
+using Firebase.Xamarin.Database.Query;
+
+namespace Application3
+{
+    [Activity(Label = "Application3", Icon = "@drawable/icon", MainLauncher =true, Theme ="@style/AppTheme")]
+    public class MainActivity : AppCompatActivity
+    {
+        private EditText input_name, input_email;
+        private ListView list_data;
+        private ProgressBar circular_progress;
+        private List<Account> list_users = new List<Account>();
+        private ListViewAdapter adapter;
+        private Account selectedAccount;
+        private const string FirebaseURL = "https://xamarinandroidfirebase.firebaseio.com/";
+        protected override async void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+            //set default font
+          
+            SetContentView (Resource.Layout.Main);
+            //add toolbar
+            Android.Support.V7.Widget.Toolbar toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toobar);
+            toolbar.Title = "Firebase demo";
+            SetSupportActionBar(toolbar);
+
+            //view
+            circular_progress = FindViewById<ProgressBar>(Resource.Id.circularProgress);
+            input_name = FindViewById<EditText>(Resource.Id.name);
+            input_email = FindViewById<EditText>(Resource.Id.email);
+            list_data = FindViewById<ListView>(Resource.Id.list_data);
+            list_data.ItemClick += (s, e) => {
+                Account acc = list_users[e.Position];
+                selectedAccount = acc;
+                input_name.Text = acc.name;
+                input_email.Text = acc.email;
+            };
+            await LoadData();
+
+        }
+
+        private async Task LoadData()
+        {
+            circular_progress.Visibility = ViewStates.Visible;
+            list_data.Visibility = ViewStates.Invisible;
+            var firebase = new FirebaseClient(FirebaseURL);
+            var items = await firebase
+                .Child("users").OnceAsync<Account>();
+            list_users.Clear();
+            adapter = null;
+            foreach(var item in items)
+            {
+                Account acc = new Account();
+                acc.uid = item.Key;
+                acc.name = item.Object.name;
+                acc.email = item.Object.email;
+                list_users.Add(acc);
+            }
+            adapter = new ListViewAdapter(this, list_users);
+            adapter.NotifyDataSetChanged();
+            list_data.Adapter = adapter;
+
+
+            circular_progress.Visibility = ViewStates.Invisible;
+            list_data.Visibility = ViewStates.Visible;
+
+        }
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            MenuInflater.Inflate(Resource.Menu.menu_main, menu);
+            return base.OnCreateOptionsMenu(menu);
+        }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            int id = item.ItemId;
+            if (id == Resource.Id.menu_add)
+            {
+                CreateUser();
+            }
+            else if (id == Resource.Id.menu_save)
+            {
+                UpdateUser(selectedAccount.uid,input_name.Text,input_email.Text);
+            }
+            else if (id == Resource.Id.menu_remove)
+            {
+                DeleteUser(selectedAccount.uid);
+            }
+            return base.OnOptionsItemSelected(item);
+        }
+
+        private async void DeleteUser(string uid)
+        {
+            var firebase = new FirebaseClient(FirebaseURL);
+            await firebase.Child("users").Child(uid).DeleteAsync();
+            await LoadData();
+        }
+
+        private async void UpdateUser(string uid, string name, string email)
+        {
+            var firebase = new FirebaseClient(FirebaseURL);
+            await firebase.Child("users").Child(uid).Child("name").PutAsync(name);
+            await firebase.Child("users").Child(uid).Child("name").PutAsync(name);
+            await LoadData();
+        }
+
+        private async void CreateUser()
+        {
+            Account user = new Account();
+            user.uid = string.Empty;
+            user.name = input_name.Text;
+            user.email = input_email.Text;
+            var firebase = new FirebaseClient(FirebaseURL);
+
+            //add item
+            var item = await firebase.Child("users").PostAsync<Account>(user);
+            await LoadData();
+        }
+    }
+}
+
+//create list_items.axml in layout folder
+//list_items.axml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/list_name"
+        android:text="User"
+        android:textStyle="bold"
+        android:textSize="30sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+  <TextView
+       android:id="@+id/list_email"
+       android:text="Email"
+       android:textStyle="italic"
+       android:textSize="20sp"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content" />
+</LinearLayout>
+
+//create new class in application3 ListViewAdapter.cs
+//ListViewAdapter.cs
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+using Java.Lang;
+using Application3.Model;
+
+namespace Application3
+{
+    class ListViewAdapter : BaseAdapter
+    {
+        Activity activity;
+        List<Account> lstAccounts;
+        LayoutInflater inflater;
+        public ListViewAdapter(Activity activity, List<Account> lstAccounts)
+        {
+            this.activity = activity;
+            this.lstAccounts = lstAccounts;
+        }
+        public override int Count
+        {
+            get
+            {
+                return lstAccounts.Count;
+            }
+        }
+
+        public override Java.Lang.Object GetItem(int position)
+        {
+            return position;
+        }
+
+        public override long GetItemId(int position)
+        {
+            return position;
+        }
+
+        public override View GetView(int position, View convertView, ViewGroup parent)
+        {
+            inflater = (LayoutInflater)activity.BaseContext.GetSystemService(Context.LayoutInflaterService);
+            View itemView = inflater.Inflate(Resource.Layout.list_items,null);
+            TextView txtUser = itemView.FindViewById<TextView>(Resource.Id.list_name);
+            TextView txtEmail = itemView.FindViewById<TextView>(Resource.Id.list_email);
+            if (lstAccounts.Count > 0)
+            {
+                txtUser.Text = lstAccounts[position].name;
+                txtEmail.Text = lstAccounts[position].email;
+            }
+            return itemView;
+        }
+    }
+
+    
+}
+
+//create new folder in application3 named Model and create class account.cs in it
+//Account.cs
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+
+namespace Application3.Model
+{
+    class Account
+    {
+        public string uid { get; set; }
+        public string name { get; set; }
+        public string email { get; set; }
+    }
+}
+
+//create new folder menu in resources and add menu_main.xml
+ //menu_main.xml
+ <?xml version="1.0" encoding="utf-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+  <item android:id="@+id/menu_add"
+        android:title="Add"
+        android:icon="@drawable/thumb_3"
+        app:showAsAction="always"></item>
+  <item android:id="@+id/menu_save"
+        android:title="Save"
+        android:icon="@drawable/thumb_2"
+        app:showAsAction="always"></item>
+  <item android:id="@+id/menu_remove"
+        android:title="Remove"
+        android:icon="@drawable/thumb_1"
+        app:showAsAction="always"></item>
+</menu>
+
+//add 3 icons thumb_3 thumb_2 thumb_1 in drawable
+
+//add styles.xml in values folder
+//styles.xml
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+   
+  </style>
+  <style name="CircularProgress" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorAccent">@color/circularColor</item>
+  </style>
+</resources>
+
+//add colors.xml in values folder
+//colors.xml
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <color name="colorPrimary">#009688</color>
+  <color name="colorPrimaryDark">#00695C</color>
+  <color name="colorAccent">#64FFDA</color>
+  <color name="circularColor">#9F489B</color>
+</resources>
+

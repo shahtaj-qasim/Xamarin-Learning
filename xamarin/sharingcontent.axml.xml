@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minWidth="25px"
+    android:minHeight="25px" >
+
+</LinearLayout>
+//create menu folder in resources and add menu.xml in it
+
+using Android.App;
+using Android.Widget;
+<?xml version="1.0" encoding="utf-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+>
+  <item
+    android:id="@+id/id_share"
+    android:actionProviderClass="android.widget.ShareActionProvider"
+    android:icon="@android:drawable/ic_menu_share"
+    android:title="Share"
+    app:showAsAction="always"></item>
+</menu>
+
+using Android.OS;
+using Android.Support.V7.App;
+using Android.Support.Design.Widget;
+using Android.Views;
+using Android.Content;
+
+namespace Application2
+{
+    [Activity(Label = "Application2", MainLauncher = true, Icon = "@drawable/icon"
+        ,Theme ="@style/Theme.AppCompat.Light.DarkActionBar")]
+    public class MainActivity : AppCompatActivity
+    {
+
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+            SetContentView(Resource.Layout.Main);
+
+
+
+        }
+      public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            MenuInflater.Inflate(Resource.Menu.menu, menu);
+            return true;
+        }
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            switch (item.ItemId)
+            {
+                case Resource.Id.id_share:
+                    Intent shareIntent = new Intent(Android.Content.Intent.ActionSend);
+                    shareIntent.SetType("text/plain");
+                    string shareBodyText = "This is my content to share";
+                    shareIntent.PutExtra(Android.Content.Intent.ExtraSubject, "Subject Here");
+                    shareIntent.PutExtra(Android.Content.Intent.ExtraText, shareBodyText);
+                    shareIntent.PutExtra(Android.Content.Intent.ExtraTitle, "Title here");
+                    StartActivity(Intent.CreateChooser(shareIntent, "Sharing option"));
+                    return true;
+                default:
+                    return base.OnOptionsItemSelected(item);
+            }
+        }
+    }
+}
+

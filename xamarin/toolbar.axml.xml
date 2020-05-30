@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/WhiteToolbarColor"
+        android:background="#009688"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:text="Android Toolbar-Bye Action Bar"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView1"
+        android:gravity="center" />
+</LinearLayout>
+
+//toolbar_style.xml //in values folder
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <style name="WhiteToolbarColor" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    <item name="android:textColorPrimary">#FFF</item>
+  </style>
+</resources>
+
+//toolbar.xml //in ur created menu folder
+<?xml version="1.0" encoding="utf-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools">
+
+  <item
+    android:id="@+id/search"
+    android:title="Search">
+  </item>
+  <item
+  android:id="@+id/share"
+  android:title="Share">
+  </item>
+  <item
+  android:id="@+id/email"
+  android:title="Email">
+  </item>
+</menu>
+
+//mainActivity.cs
+using Android.App;
+using Android.Widget;
+using Android.OS;
+using System;
+using Android.Views;
+using Android.Support.V7.App;
+using Android.Support.V7.Widget;
+
+namespace Application
+{
+    [Activity(Label = "Application", MainLauncher = true, Icon = "@drawable/icon", Theme ="@style/Theme.AppCompat.Light.NoActionBar")]
+    public class MainActivity : AppCompatActivity
+    {
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+            SetContentView (Resource.Layout.Main);
+            Android.Support.V7.Widget.Toolbar toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toolbar);
+            toolbar.SetTitle(Android.Graphics.Color.White);
+            SetSupportActionBar(toolbar);   
+        }
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            var inflater = MenuInflater;
+            inflater.Inflate(Resource.Menu.toolbar, menu);
+            return true;
+
+        }
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            int id = item.ItemId;
+            if (id == Resource.Id.search)
+            {
+                Toast.MakeText(this, "Search Clicked", ToastLength.Short).Show();
+                return true;
+            }
+            else if (id == Resource.Id.share)
+            {
+                Toast.MakeText(this, "Share Clicked", ToastLength.Short).Show();
+                return true;
+            }
+            else if (id == Resource.Id.email)
+            {
+                Toast.MakeText(this, "Email Clicked", ToastLength.Short).Show();
+                return true;
+            }
+            return base.OnOptionsItemSelected(item);
+        }
+
+
+    }
+}
+

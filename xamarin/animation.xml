@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+        <Button
+            android:id="@+id/btnStart"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Start" />
+        <Button
+            android:id="@+id/btnStop"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Stop" />
+    </LinearLayout>
+  <ImageView
+        android:id="@+id/imgView"
+        android:layout_above="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</RelativeLayout>
+
+//create animation.xml in drawable folder
+<?xml version="1.0" encoding="utf-8" ?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+  <item android:drawable="@drawable/thumb_1" android:duration="50"/>
+  <item android:drawable="@drawable/thumb_2" android:duration="50"/>
+  <item android:drawable="@drawable/thumb_3" android:duration="50"/>
+  <item android:drawable="@drawable/thumb_4" android:duration="50"/>
+  <item android:drawable="@drawable/thumb_1" android:duration="50"/>
+  <item android:drawable="@drawable/thumb_2" android:duration="50"/>
+  <item android:drawable="@drawable/thumb_3" android:duration="50"/>
+  <item android:drawable="@drawable/thumb_4" android:duration="50"/>
+  <item android:drawable="@drawable/thumb_1" android:duration="50"/>
+  <item android:drawable="@drawable/thumb_2" android:duration="50"/>
+  <item android:drawable="@drawable/thumb_3" android:duration="50"/>
+  <item android:drawable="@drawable/thumb_4" android:duration="50"/>
+        
+</animation-list>
+
+using Android.App;
+using Android.Widget;
+using Android.OS;
+using Android.Support.V7.App;
+using Android.Support.V4.App;
+using Android.Support.Design.Widget;
+using Android.Views;
+using Android.Content;
+using Android.Webkit;
+using Java.Lang;
+using Android.Graphics.Drawables;
+
+namespace Application2
+{
+    [Activity(Label = "Application2", MainLauncher = true, Icon = "@drawable/icon"
+        ,Theme ="@style/Theme.AppCompat.Light.DarkActionBar")]
+    public class MainActivity : AppCompatActivity
+    {
+
+        AnimationDrawable anim;
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "main" layout resource
+           
+            SetContentView(Resource.Layout.Main);
+            var imgView = FindViewById<ImageView>(Resource.Id.imgView);
+            if (imgView == null) throw new AssertionError();
+            imgView.Visibility = ViewStates.Invisible;
+            imgView.SetBackgroundResource(Resource.Drawable.animation);
+            anim = (AnimationDrawable)imgView.Background;
+            var btnStart = FindViewById<Button>(Resource.Id.btnStart);
+            var btnStop = FindViewById<Button>(Resource.Id.btnStop);
+            btnStart.Click += delegate {
+                imgView.Visibility = ViewStates.Visible;
+                if (anim.IsRunning) { anim.Stop(); }
+                anim.Start();
+            };
+            btnStop.Click += delegate {
+                anim.Stop();
+            };
+        }
+     
+    }
+}
+
