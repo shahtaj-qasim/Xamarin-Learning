@@ -1,0 +1,228 @@
+//open files with ur app
+//form1.cs
+public Form1(string s){
+
+	InitializeComponent();
+	MessageBox.Show(s);
+}
+program.css
+static void Main(string[] files){
+	..............
+	...........some code.........
+	...of 3 lines...
+	foreach(string s in files){
+	Application.Run(new Form1(s));
+	}
+
+}
+
+//accessing controls
+//many buttons on the form
+//inside group box not control accessed
+button1_click(){
+accessAll(this.Controls);
+}
+//for nested controls
+void accessAll(Control.ControlCollection cc){
+foreach(Control c in cc)
+	//c.Text="Adam";
+	//c.Enabled=false;
+	if(c is Button) c.Enabled=false; //only buttons are disabled
+	if(c is CheckBox){
+	CheckBox ch= c as CheckBox;
+	ch.Checked=true; 
+	}
+	if(c.HasChildren) accessAll(c.Controls);
+}	
+}
+
+
+
+//need button and trackbar from toolbox
+//in properties -> maximum value=10 minimum value=0 tick=10
+button1_click(){
+	MessageBox.Show(trackBar1.Value.ToString());
+}
+
+//numericupdown from toolbox
+
+
+
+//md5 textbox and button
+button1_click(){
+	MD5CryptoServiceProvider md5= new MD5CryptoServiceProvider();
+	UTF8Encoding utf8= new UTF8Encoding();
+	MesaageBox.Show(BitConverter.ToString(md5.ComputeHash(utf8.GetBytes(textBox1.Text))));
+
+}
+//sha1
+SHA1CryptoServiceProvider sha= new SHA1CryptoServiceProvider();
+UTF8Encoding utf8= new UTF8Encoding();
+	MesaageBox.Show(BitConverter.ToString(sha.ComputeHash(utf8.GetBytes(textBox1.Text))));
+
+
+//panel from toolbox
+//from properties -> borderstyle= fixedsingle and allowdrop=true;
+//go to events tag dblclick dragover
+panel1_dragOver(...,DragEventsArgs e){
+	e.Effect= DragDropEffects.All;
+}
+//from events dragdrop
+panel1_DragDrop(object sender, DragEventsArgs e){
+	string [] files= e.Data.GetData(DataFormats.FileDrop) as string[];
+	foreach(string s in files){
+	MessageBox.Show(s);
+	}
+}
+
+
+string Adam="Adam";
+switch(Adam){
+	case "Adam":
+	MessageBox.Show("Adam");
+	default:
+	MessageBox.Show("Default");
+	goto case "Adam";
+}
+
+
+goto myCode;
+myCode:
+{
+	MessageBox.Show("Hello");
+}
+
+//capture screen
+button1_click(){
+Bitmap b= new Bitmap(Screen.PrimaryScreen.WorkingArea.Width, Screen.PrimaryScreen.WorkingArea.Height);
+//screen is stored in var b
+Graphics g= Graphics.FromImage(b);
+g.CopyFromScreen(Point.Empty,Point.Empty,Screen.Primary.WorkingArea.Size);
+pictureBox1.Image=b;
+}
+
+
+for(;;) //infite loop
+
+//making shortcut keys
+//blank form, from events go to dblclick keydown from properties-> key preview=true
+Form1_KeyDown(object sender, KeyEventArgs e){
+	if(e.Control && e.KeyCode.ToString()=="A"){
+	MessageBox.Show("Adam"); //press ctrl+A to see Adam
+	}
+	if(e.Alt && e.KeyCode.ToString()=="B"){
+	MessageBox.Show("Adam alt B"); //press alt+B to see Adam
+	}
+	if(e.Alt && e.Control && e.KeyCode.ToString=="A"){
+	MessageBox.Show("Adam alt ctrl A"); //press alt+ctrl+A to see Adam
+	}
+}
+
+//can also do this from textbox
+textBox1_KeyDown(object sender, KeyEventArgs e)
+
+
+
+if(textBox1.Text=""){
+	MessageBox.Show("Please enter name");
+	textBox1.Select()//cursor is back to textbox
+}
+public Form1(){
+	InitilizeComponent();
+	comboBox1.SelectedIndex=0;
+}
+if(comboBox1.SelectedIndex==0){
+	 MessageBox.Show("Select a method");
+	 comboBox1.Select(); //
+}
+
+
+panel to be visible borderstyle=fixedsingle
+
+for form not to be sizable, form properties, maximizbox=false and formborderstyle= fixed 3d
+
+
+//optional parameters
+void showMessage(string message, string title=""){
+	MessageBox.Show(message,title);
+}
+button1_click(){
+showMessage("adam");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

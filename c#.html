@@ -1,0 +1,346 @@
+List<string> names=new List<string>();
+names.Add("Shahtaj");
+//add more
+MessageBox.Show(names[0].ToString());
+
+foreach loop allows to visit every element inside the array
+
+string[] names={"adam","joe"}; //list bhi kr skti ho yahan
+foreach(string s in names){ //visits each string in the array
+	MessageBox.Show(s.ToString());
+}
+
+try{}
+catch{}
+finally{
+//finally code gonna run if there is error or not
+}
+
+checkBox.Checked
+myClass.css
+namespace myNameSpace{
+	class myClass{
+
+	}
+
+}
+form1.cs
+using myNameSpace;
+namespace youtube{
+button1_click(){
+	myClass mc=new myClass();
+mc.whatever();
+}
+}
+
+class myClass{
+void checkString(string st){
+	if(st=="") throw new Exception("shutup man");
+}
+}
+
+inheritance
+class mySecondClass: myClass,MyInterface
+{
+public void MyVoid(){ base.ShowMessage("My void interface");
+}
+
+interface
+interface MyInterface{
+all methods in interface is public
+void MyVoid();
+}
+ structs cannot be inherited but from interfaces
+
+partial class myClass{
+string st1="adam";
+partial void msg(string msg); //cannot have implementation here
+}
+myclass2.cs
+partial class myClass{ //both classes with same name
+string s2="smith";
+partial void msg(string msg){MessageBox.Show(msg);} //we could only use this inside this class so we make a public method
+public void showMsg(string msg){msg(msg);}
+}
+these two classes form a complete class
+
+cannot create instance of abstract class //abstract method can not be private
+abstract class myClass{
+	public abstract void showMsg(string msg); //cannot have body
+}
+
+ternary operators
+string st=(checkBox1.Checked) ? "It's checked": "Not checked";
+Message.Show(st);
+
+//openfile dialog
+button1_click(){
+	OpenFileDialog ofd=new OpenFileDialog();
+	ofd.Title="Open Image"; //this is title of thie window
+	ofd.Filter="PNG Image|*.png|BIK|*.bik";
+	//ofd.ShowDialog();
+	if(ofd.ShowDialog()== System.Windows.Forms.DialogResult.OK){
+	MessageBox.Show(ofd.FileName); //for path
+	MessageBox.Show(ofd.SafeFileName); //only filename
+	}
+}
+
+Byte myByte=255;
+short myShort=0; or Int16 int16=0; 
+int myInt=0; (4 bytes) Int32 int32=0; int 32 bits
+long myLong=0; or Int64 myint64=0;
+
+streamreader
+using System.IO;
+button1_Click(){
+	OpenFileDialog ofd= new OpenFileDialog();
+	if(ofd.ShowDialog()== System.WIndows.Forms.DialogResult.OK){
+	StreamReader sr=new StreamReader(File.OpenRead(ofd.filename));
+	textBox1.Text=sr.ReadtoEnd(); //show content in textbox from some file
+	sr.Dispose(); //end file
+	}
+}
+
+
+OpenFileDialog ofd= new OpenFileDialog();
+	if(ofd.ShowDialog()== System.WIndows.Forms.DialogResult.OK){
+	StreamReader sr=new StreamReader(ofd.filename);
+	char c=(char)sr.Peek(); //0position //like read sr.Read(); //peek gives integer
+	char c1=(char)sr.Read(); //1position
+	char c2=(char)sr.Read();
+	MessageBox.Show(c.ToString()+" : "+c1.ToString()+" : "+c2.ToString());
+	}
+
+
+//open button
+button1_click(){
+	OpenFileDialog ofd= new OpenFileDialog();
+	if(ofd.ShowDialog()== System.WIndows.Forms.DialogResult.OK){
+	button2.Enabled=true;
+	path=ofd.FileName;
+}
+}
+
+//write button
+button2_click(){
+StreamWriter sw=new StreamWriter(File.Create(path)); //File.OpenWriter(path));
+sw.Write(textBox1.Text);
+//sw.WriteLine(textBox1.Text);
+//sw.WriteLine("This is second line");
+sw.Dispose();	
+}
+
+\\convert class
+\\converts whatever in textbox into integer
+MessageBox.Show(Convert.ToInt32(textBox1.Text).ToString());
+MessageBox.Show(Convert.ToChar(textBox1.Text).ToString());
+MessageBox.Show(Convert.ToBoolean(textBox1.Text).ToString());
+
+
+//is operator
+object myObj="Adam";
+if(myObj is string) MessageBox.Show("It is string");
+
+Control con=button1;
+if(con is Button){ Button but=(Button)con; //or con as Button;
+MessageBox.Show(con.Text);
+}
+
+
+String name="John Smith";
+string firstname=name.Substring(0,4)
+MessageBox.Show(firstname); //john
+
+
+string sentence="Hello, my name is Adam";
+string after=sentence.Remove(0,7); //hello is removed
+MessageBox.Show(after);
+string after=sentence.Replace("Hello","Hi"); //replace hello with hi
+MessageBox.Show(after);
+
+
+//use label in form
+label1.Text=Math.Abs(-4).ToString(); //4
+label1.Text=Math.PI.ToString();
+label1.Text=Math.Pow(4,2).ToString(); //4^2
+label1.Text=Math.Round(4.7).ToString(); //5
+
+
+Random r=new Random();
+MessageBox.Show(r.Next().ToString());
+MessageBox.Show(r.Next(0,100).ToString()); //0-100
+MessageBox.Show(r.NextDouble().ToString());
+
+
+byte [] buffer=new byte[5];
+Random r=new Random();
+r.NextBytes(buffer);
+MessageBox.Show(BitConverter.ToString(buffer));
+
+
+using System.IO;
+FolderBrowserDialog fbd=new FolderBrowser Dialog();
+if(fbd.ShowDialog()==System.Windows.Forms.DialogResult.OK){
+	MessageBox.Show(fbd.SelectedPath);
+}
+
+FolderBrowserDialog fbd=new FolderBrowser Dialog();
+fbd.RootFolder=Environment.SpecialFolder.MyDocuments; //mydocuments me hoga
+//fbd.Description= "Adam was here"; 
+if(fbd.ShowDialog()==System.Windows.Forms.DialogResult.OK){
+	MessageBox.Show(fbd.SelectedPath);
+}
+
+
+FolderBrowserDialog fbd=new FolderBrowser Dialog();
+if(fbd.ShowDialog()==System.Windows.Forms.DialogResult.OK){
+   string[] files = Directory.GetFiles(fbd.SelectedPath); //also can GetDirectories(fbd.SelectedPath);
+   foreach(string s in files){
+   MessageBox.Show(s);
+   }
+}
+
+FolderBrowserDialog fbd=new FolderBrowser Dialog();
+if(fbd.ShowDialog()==System.Windows.Forms.DialogResult.OK){
+	//MessageBox.Show(Directory.GetCreationTime(fbd.SelectedPath).ToString());
+
+}
+
+
+using System.Diagnostics;
+Process.Start("notepad.exe");
+Process.Start("cmd.exe");
+MessageBox.Show(Process.GetCurrentProcess().ProcessName); //using youtube so get youtube
+Process.GetCurrentProcess().Kill();
+
+
+form1_load(){
+pictureBox1.ImageLocation="http:google/.....logo.png";
+}
+
+
+ColorDialog cd= new ColorDialog();
+//cd.AllowFullOpen=false;
+if(cd.ShowDialog()==System.Windows.Forms.DialogResult.OK){
+	button1.BackColor=cd.Color;
+}
+
+
+
+FontDialog fd= new FontDialog();
+//fd.MinSize=10; fd.MaxSize=20;
+fd.ShowColor=true;
+//fd.ShowHelp=true;
+//fd.HelpRequest += new EventHandler(fd_HelpRequest);
+if(fd.ShowDialog()==System.Windows.Forms.DialogResult.OK){
+	textBox1.Font=fd.Font;
+	textBox1.ForeColor=fd.Color;
+
+}
+void fd_HelpRequest(object sender, EventArgs e){
+	MessageBox.Show("Choose a font for a textbox");
+}
+
+
+
+ OpenFileDialog ofd = new OpenFileDialog();
+ if(ofd.ShowDialog()==DialogResult.OK){
+ SoundPlayer s= new SoundPlayer(ofd.FileName);
+ s.Play();
+ //s.PlayLooping();
+ //s.PlaySync(); //screen freeze while playing
+ }
+
+SystemSounds.Asterisk.Play();
+SystemSounds.Beep.Play();
+SystemSounds.Exclamation.Play();
+SystemSounds.Hand.Play();
+
+
+
+button1_click(){
+Form2 f= new Form2(textBox1.Text);
+f.Show(); //u can go to older form1
+//f.ShowDialog(); //now u cant go to older form1 
+}
+
+//form2 class
+public Form2(string mystring){
+	InitializeComponent();
+	label1.Text=mystring;
+}
+
+
+//multidocument interface -> form inside a form (mdi)
+//class form 1
+button1_click(){
+this.IsMdiContainer=true;
+Form2 f= new Form2();
+f.MdiParent=this;
+f.show(); //produces form inside a form
+Form3 f= new Form3();
+f.MdiParent=this;
+f.show(); //now gives 2 forms
+}
+button2_click(){
+	this.LayoutMdi(MdiLayout.Cascade);
+}
+
+
+combobox add in form -> it is dropdown
+
+
+//do stuff button
+button1_click(){
+	progressBar1.Value +=10;
+	//progressBar1.PerformStep(); //for this, go to step property and add 10 in it
+	//progressBar1.MarqueeAnimationSpeed=100;
+}
+
+//reset button
+button2_click(){
+	progressBar1.Value=0;
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
